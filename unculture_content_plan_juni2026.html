@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unculture — Content Plan Juni 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0D0D0D; --bg2: #161616; --bg3: #1E1E1E;
+    --border: #2A2A2A; --border2: #333;
+    --text: #F0EEE8; --text2: #999; --text3: #555;
+    --accent: #E8E0C8;
+    --green: #6FAE3C; --green-bg: #1A2C0F; --green-text: #9BD466;
+    --red: #D85030; --red-bg: #2C1008; --red-text: #F4926A;
+    --mono: 'DM Mono', monospace; --sans: 'Syne', sans-serif;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+  .header {
+    background: var(--bg); border-bottom: 1px solid var(--border);
+    padding: 20px 28px 16px; display: flex; justify-content: space-between;
+    align-items: flex-end; position: sticky; top: 0; z-index: 100;
+  }
+  .header-brand { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+  .header-sub { font-size: 11px; font-weight: 500; color: var(--text2); font-family: var(--mono); letter-spacing: 0.06em; margin-top: 3px; }
+  .header-meta { text-align: right; font-family: var(--mono); font-size: 10px; color: var(--text3); line-height: 1.7; }
+  .wrap { padding: 24px 28px 60px; }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center;
+    padding: 12px 16px; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 28px;
+  }
+  .legend-label { font-size: 10px; font-weight: 600; color: var(--text3); font-family: var(--mono); letter-spacing: 0.08em; margin-right: 4px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--text2); font-family: var(--mono); }
+  .legend-sep { width: 1px; height: 12px; background: var(--border2); }
+  .note-red { color: var(--red-text); font-size: 10px; font-family: var(--mono); }
+  .note-green { color: var(--green-text); font-size: 10px; font-family: var(--mono); }
+  .note-ads { color: #A78BFA; font-size: 10px; font-family: var(--mono); }
+  .week-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; margin-top: 28px; }
+  .week-label { font-size: 10px; font-weight: 600; color: var(--text3); font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; }
+  .week-focus { font-size: 10px; font-weight: 500; color: var(--text2); font-family: var(--mono); background: var(--bg3); border: 1px solid var(--border2); padding: 2px 8px; border-radius: 3px; }
+  .week-line { flex: 1; height: 1px; background: var(--border); }
+  .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 8px; }
+  .day-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px; min-height: 160px; display: flex; flex-direction: column; gap: 5px;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s; position: relative;
+  }
+  .day-card:hover:not(.off) { border-color: var(--border2); background: var(--bg3); }
+  .day-card.off { opacity: 0.4; cursor: default; }
+  .day-card.special { border-color: var(--green) !important; }
+  .day-card.payday { border-color: var(--red) !important; }
+  .day-card.ads-boost { border-color: #7C3AED !important; }
+  .day-card.active { border-color: var(--accent) !important; background: var(--bg3); }
+  .day-header { display: flex; justify-content: space-between; align-items: flex-start; }
+  .day-name { font-size: 9px; font-weight: 600; color: var(--text3); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; }
+  .day-num { font-size: 12px; font-weight: 700; color: var(--text); font-family: var(--mono); }
+  .tag { font-size: 8px; font-weight: 600; padding: 2px 5px; border-radius: 3px; white-space: nowrap; align-self: flex-start; font-family: var(--mono); }
+  .special-tag { background: var(--green-bg); color: var(--green-text); }
+  .payday-tag { background: var(--red-bg); color: var(--red-text); }
+  .ads-tag { background: #1E1040; color: #A78BFA; }
+  .type-badge { font-size: 8px; font-weight: 600; padding: 2px 6px; border-radius: 3px; white-space: nowrap; align-self: flex-start; font-family: var(--mono); letter-spacing: 0.04em; }
+  .badge-reel     { background: #1A1640; color: #9B96F0; }
+  .badge-feed     { background: #0A2420; color: #5ECBAF; }
+  .badge-story    { background: #281400; color: #F0A84A; }
+  .badge-carousel { background: #201A50; color: #B8B2F4; }
+  .badge-ugc      { background: #2A0C1A; color: #F4A0C0; }
+  .badge-off      { background: var(--bg3); color: var(--text3); }
+  .post-title { font-size: 11px; font-weight: 600; color: var(--text); line-height: 1.4; flex: 1; }
+  .product-tag { font-size: 9px; color: var(--text2); display: flex; align-items: center; gap: 4px; margin-top: auto; font-family: var(--mono); }
+  .pdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-select { background: #E24B4A; }
+  .dot-core   { background: #888780; }
+  .dot-cap    { background: #378ADD; }
+  .dot-brand  { background: var(--green); }
+  .dot-none   { background: var(--border2); }
+  .detail-panel { background: var(--bg2); border: 1px solid var(--border2); border-radius: 10px; padding: 18px 20px; margin-bottom: 4px; display: none; }
+  .detail-panel.open { display: block; }
+  .detail-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .detail-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .detail-date { font-size: 10px; color: var(--text2); font-family: var(--mono); margin-top: 3px; }
+  .close-btn {
+    background: var(--bg3); border: 1px solid var(--border2); color: var(--text2);
+    width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 12px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: color 0.15s;
+  }
+  .close-btn:hover { color: var(--text); }
+  .detail-hook { font-size: 13px; color: var(--accent); font-style: italic; border-left: 2px solid var(--accent); padding-left: 12px; margin-bottom: 14px; line-height: 1.6; font-family: var(--mono); }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .db { background: var(--bg3); border-radius: 6px; border: 1px solid var(--border); padding: 10px 12px; }
+  .db-label { font-size: 9px; font-weight: 600; color: var(--text3); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
+  .db-val { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .db.full { grid-column: 1 / -1; }
+  .caption-box { background: #111; border: 1px solid #2A2A2A; border-radius: 6px; padding: 12px 14px; margin-top: 8px; }
+  .caption-label { font-size: 9px; font-weight: 600; color: var(--text3); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .caption-text { font-size: 12.5px; color: var(--text); line-height: 1.75; white-space: pre-wrap; }
+  .copy-btn {
+    margin-top: 10px; background: var(--bg3); border: 1px solid var(--border2);
+    color: var(--text2); font-size: 10px; font-family: var(--mono); padding: 5px 12px;
+    border-radius: 4px; cursor: pointer; transition: all 0.15s; letter-spacing: 0.04em;
+  }
+  .copy-btn:hover { background: var(--border2); color: var(--text); }
+  .copy-btn.copied { color: var(--green-text); border-color: var(--green); }
+  .progress-strip {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    padding: 10px 16px; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 20px; font-family: var(--mono); font-size: 10px; color: var(--text2);
+  }
+  .progress-strip b { color: var(--text); }
+  .ps-sep { color: var(--border2); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-brand">UNCULTURE</div>
+    <div class="header-sub">CONTENT PLAN — MEI–JUNI 2026</div>
+  </div>
+  <div class="header-meta">Target: 24 posts Juni<br>Channel: IG + TikTok</div>
+</div>
+
+<div class="wrap">
+
+  <div class="legend">
+    <span class="legend-label">FORMAT</span>
+    <span class="legend-item"><span class="type-badge badge-reel">Reels</span></span>
+    <span class="legend-item"><span class="type-badge badge-feed">Feed</span></span>
+    <span class="legend-item"><span class="type-badge badge-carousel">Carousel</span></span>
+    <span class="legend-item"><span class="type-badge badge-story">Story</span></span>
+    <span class="legend-item"><span class="type-badge badge-ugc">UGC</span></span>
+    <span class="legend-sep"></span>
+    <span class="legend-label">PRODUK</span>
+    <span class="legend-item"><span class="pdot dot-select"></span>Select</span>
+    <span class="legend-item"><span class="pdot dot-core"></span>Core</span>
+    <span class="legend-item"><span class="pdot dot-cap"></span>Cap</span>
+    <span class="legend-item"><span class="pdot dot-brand"></span>Brand</span>
+    <span class="legend-sep"></span>
+    <span class="note-red">▸ merah = payday push</span>
+    <span class="note-green">▸ hijau = hari spesial</span>
+    <span class="note-ads">▸ ungu = boost ads</span>
+  </div>
+
+  <div class="progress-strip">
+    <b>28–30 Mei</b> <span class="ps-sep">·</span> Done/Scheduled
+    <span class="ps-sep">|</span>
+    <b>31 Mei – 30 Jun</b> <span class="ps-sep">·</span> Active plan
+    <span class="ps-sep">|</span>
+    Posts Juni: <b>24</b>
+    <span class="ps-sep">|</span>
+    Creator live: <b>Week 3</b>
+    <span class="ps-sep">|</span>
+    Ads on: <b>Week 3</b>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <span class="week-label">Minggu 1</span>
+      <span class="week-focus">28 Mei – 3 Jun · Fondasi & Reaktivasi</span>
+      <span class="week-line"></span>
+    </div>
+    <div class="week-grid" id="w1"></div>
+    <div class="detail-panel" id="d1"></div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <span class="week-label">Minggu 2</span>
+      <span class="week-focus">4 Jun – 10 Jun · Aktivasi + Padel Drop</span>
+      <span class="week-line"></span>
+    </div>
+    <div class="week-grid" id="w2"></div>
+    <div class="detail-panel" id="d2"></div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <span class="week-label">Minggu 3</span>
+      <span class="week-focus">11 Jun – 17 Jun · Core Push + Creator Live + Ads On</span>
+      <span class="week-line"></span>
+    </div>
+    <div class="week-grid" id="w3"></div>
+    <div class="detail-panel" id="d3"></div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <span class="week-label">Minggu 4</span>
+      <span class="week-focus">18 Jun – 24 Jun · Momentum + Select Spotlight</span>
+      <span class="week-line"></span>
+    </div>
+    <div class="week-grid" id="w4"></div>
+    <div class="detail-panel" id="d4"></div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <span class="week-label">Minggu 5</span>
+      <span class="week-focus">25 Jun – 30 Jun · Payday Push + Month Close</span>
+      <span class="week-line"></span>
+    </div>
+    <div class="week-grid" id="w5"></div>
+    <div class="detail-panel" id="d5"></div>
+  </div>
+
+</div>
+
+<script>
+const w1 = [
+  {
+    day:"Kam", num:"28 Mei", badge:"feed", bl:"Feed", title:"Lineup reveal — semua artikel",
+    product:"core", pl:"All Products", special:null, payday:false, done:true, adsBoost:false,
+    hook:"Nggak ada intro. Langsung lihat sendiri.",
+    copy:"Drop visual pertama. Flatlay clean — Select, Core Basic Logo Black, Core Basic Logo Creme, Core Black on Black. Biarkan produknya yang ngomong.",
+    format:"Single photo — flatlay 4 artikel",
+    cta:"Save post ini sebelum lo nyesel",
+    hashtag:"#unculture #coreseries #oversizedtee #localbrandindo #uncultureselect",
+    caption:`Empat artikel. Satu mindset.
+
+Nggak ada yang kita bikin buat jadi pilihan kedua.
+
+Select. Core Basic Logo. Core Black on Black — pick yours.
+
+🔗 link bio
+.
+.
+#unculture #localbrand #oversizedtee #jakartafashion #streetwearindo`
+  },
+  {
+    day:"Jum", num:"29 Mei", badge:"reel", bl:"Reels", title:"Pre-payday: styling Core Basic Logo",
+    product:"core", pl:"Core Basic Logo Creme", special:null, payday:true, done:true, adsBoost:false,
+    hook:"Besok gajian. Kita cuma mengingatkan.",
+    copy:"Reels styling ringan — Core Basic Logo Creme, 3 look berbeda. Tone playful, nggak hard sell.",
+    format:"Reels transisi outfit 15–20 detik",
+    cta:"Mau yang mana — comment di bawah",
+    hashtag:"#ootdindo #unculture #gajian #styleinspo #oversized",
+    caption:`Besok gajian.
+
+Ini udah masuk cart lo belum?
+
+Core Basic Logo Creme — satu kaos yang works di semua situasi. Literally.
+
+🔗 link bio
+.
+.
+#unculture #gajian #corebasiclogo #ootdindo #localbrand`
+  },
+  {
+    day:"Sab", num:"30 Mei", badge:"feed", bl:"Feed", title:"PAYDAY DROP — Unculture Select",
+    product:"select", pl:"Unculture Select", special:null, payday:true, done:true, adsBoost:false,
+    hook:"Lo baru gajian. Ini bukan kebetulan.",
+    copy:"Unculture Select spotlight. Polo zip hitam — premium, editorial, on-brand. Hard sell tapi tetap cool.",
+    format:"Single photo — close-up detail + body shot",
+    cta:"Link di bio. Stok terbatas.",
+    hashtag:"#uncultureselect #paydaytreat #premiumlocal #localbrand",
+    caption:`Unculture Select.
+
+Polo zip yang nggak minta penjelasan. Bahan lebih berat, potongan lebih intentional — bukan untuk semua orang, dan itu bukan masalah.
+
+Kalau lo nggak siap dilihat, jangan pake ini.
+
+🔗 link bio
+.
+.
+#uncultureselect #paydaydrop #premiumlocal #oversized #localbrandindo`
+  },
+  {
+    day:"Min", num:"31 Mei", badge:"story", bl:"Story", title:"Weekend poll — lo styling gimana?",
+    product:"core", pl:"Core Series", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Sunday mood — lo pake apa hari ini?",
+    copy:"Story poll ringan. Engage audience, reply comment dari 3 post sebelumnya. Nggak perlu konten berat hari ini.",
+    format:"Story poll + question box",
+    cta:"Vote & kirim foto lo",
+    hashtag:"—",
+    caption:`Poll di story:
+"Oversized + shorts" vs "Oversized + wide pants" — mana vibe lo hari ini?
+
+(question box) Show us the fit 👇`
+  },
+  {
+    day:"Sen", num:"1 Jun", badge:"feed", bl:"Feed", title:"Hari Pancasila — brand statement",
+    product:"brand", pl:"Brand", special:"Hari Pancasila", payday:false, done:false, adsBoost:false,
+    hook:"Lokal bukan berarti biasa.",
+    copy:"Statement visual Hari Pancasila. Bukan yang klise. Angle Unculture: dibuat di sini, dipakai orang yang nggak mau dikotakkan.",
+    format:"Single editorial photo — clean background, typography bold",
+    cta:"Bangga lokal nggak harus bilang 'cinta produk dalam negeri'.",
+    hashtag:"#haripancasila #unculture #lokalproud #madeinindo",
+    caption:`Dibuat di sini.
+Dipakai sama orang yang nggak mau dikotakkan.
+
+Selamat Hari Lahir Pancasila — lokal bukan berarti biasa.
+
+— Unculture 🇮🇩
+.
+.
+#haripancasila #unculture #lokalproud #madeinindo #localbrand`
+  },
+  {
+    day:"Sel", num:"2 Jun", badge:"reel", bl:"Reels", title:"Unculture Corduroy Cap — reveal",
+    product:"cap", pl:"Corduroy Cap", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Topi yang nggak minta perhatian — tapi selalu dapet.",
+    copy:"Reels close-up bordir bear + face. Slow reveal, tekstur corduroy keliatan jelas. Pasca libur = engagement biasanya tinggi.",
+    format:"Reels macro detail + OOTD 20 detik",
+    cta:"Comment 🐻 kalau lo mau ini",
+    hashtag:"#dadcap #corduroy #unculturecap #streetwearindo",
+    caption:`The cap that doesn't ask for attention — but always gets it.
+
+Unculture Corduroy Cap. Bordir bear x face, bahan corduroy yang aging well. Satu warna, satu statement.
+
+Comment 🐻 kalau lo mau ini.
+
+🔗 link bio
+.
+.
+#unculturecap #corduroycap #dadhat #streetwearindo #localbrand`
+  },
+  {
+    day:"Rab", num:"3 Jun", badge:"carousel", bl:"Carousel", title:"Core Basic Logo Black — 3 mood",
+    product:"core", pl:"Core Basic Logo Black", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Satu kaos. Tiga orang berbeda.",
+    copy:"Carousel — 3 slide per persona: kampus, mall, gigs. Edukasi styling tanpa menggurui. Core Basic Logo Black sebagai hero.",
+    format:"Carousel 4 slides (cover + 3 look)",
+    cta:"Swipe — tag temen yang cocok tiap look-nya",
+    hashtag:"#stylingguide #oversizedfit #unculture #genzfashion",
+    caption:`Satu kaos. Lo yang tentuin vibenya.
+
+Core Basic Logo Black — swipe untuk lihat tiga cara pakai yang beda. Pilih yang paling lo.
+
+🔗 link bio
+.
+.
+#unculture #corebasiclogo #oversized #stylinginspo #ootdindo`
+  }
+];
+
+const w2 = [
+  {
+    day:"Kam", num:"4 Jun", badge:"feed", bl:"Feed", title:"Core Black on Black — detail shot",
+    product:"core", pl:"Core Black on Black", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Print yang nggak teriak — tapi nggak bisa lo skip.",
+    copy:"Spotlight Core Black on Black. Tonal, placement print vertikal di sisi. Detail yang keliatan kalau orang emang ngerti.",
+    format:"Single photo — body shot samping + close-up print",
+    cta:"Available now — link bio",
+    hashtag:"#graphictee #unculture #blackonblack #minimalstyle",
+    caption:`Print yang nggak teriak — tapi nggak bisa lo skip.
+
+Core Black on Black. Placement vertikal di sisi, tonal, detail yang keliatan kalau orang emang ngerti cara lihat baju.
+
+🔗 link bio
+.
+.
+#unculture #coreblackonblack #blackonblack #oversized #localbrand`
+  },
+  {
+    day:"Jum", num:"5 Jun", badge:"reel", bl:"Reels", title:"Corduroy Cap + Core — full look",
+    product:"cap", pl:"Cap + Core", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Weekend dimulai dari outfit yang bener.",
+    copy:"Reels styling — pairing Corduroy Cap dengan Core tee. Cepat, punchy, ada transisi. Tone santai masuk Jumat.",
+    format:"Reels OOTD 15 detik + transition",
+    cta:"Save buat inspirasi weekend lo",
+    hashtag:"#weekendfit #unculturelook #ootdjakarta #streetstyle",
+    caption:`Weekend kit done.
+
+Corduroy Cap + Core tee — no overthinking, no wasted morning. This is the combo.
+
+Save post ini buat referensi weekend lo 🔖
+.
+.
+#unculture #weekendfit #ootdjakarta #corduroycap #streetstyle`
+  },
+  {
+    day:"Sab", num:"6 Jun", badge:"reel", bl:"Reels", title:"Jersey Padel Unculture — court drop",
+    product:"brand", pl:"Brand / Jersey Custom", special:"Lomba Padel", payday:false, done:false, adsBoost:false,
+    hook:"Kita bukan cuma bikin kaos. Kita hadir di tempat-tempat yang lo ada.",
+    copy:"Dokumentasi lomba padel. Custom jersey Unculture worn live di court. Action shot, detail jersey, behind the scene. Paling authentic content bulan ini.",
+    format:"Reels dokumentasi court — action + jersey detail + BTS",
+    cta:"Unculture goes everywhere. 🔗 link bio",
+    hashtag:"#unculture #padel #courtfit #jerseylokal #streetwearindo",
+    caption:`Kita bukan cuma bikin kaos.
+
+Kita hadir di tempat-tempat yang lo ada — termasuk di court.
+
+Unculture custom jersey. Worn live. Real game, real fit.
+
+Because style doesn't clock out. 🎾
+.
+.
+#unculture #padel #courtfit #localbrand #jerseylokal`
+  },
+  {
+    day:"Min", num:"7 Jun", badge:"off", bl:"Off", title:"Rest / Buffer",
+    product:"none", pl:"—", special:null, payday:false, done:false, adsBoost:false,
+    hook:"—",
+    copy:"Buffer day. Reply DM, engage comment, konfirmasi creator list, prep konten Week 3.",
+    format:"No post",
+    cta:"—",
+    hashtag:"—",
+    caption:"—"
+  },
+  {
+    day:"Sen", num:"8 Jun", badge:"carousel", bl:"Carousel", title:"Apa itu Unculture? — brand story",
+    product:"brand", pl:"Brand", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Brand name yang orang sering salah baca — sengaja.",
+    copy:"Carousel brand story. 5 slide: nama, visi, produk, community, closing statement. Bukan anti-kultur, tapi nggak mau dikotakkan.",
+    format:"Carousel 5 slides — clean typography",
+    cta:"Share ke yang perlu dengar ini",
+    hashtag:"#unculture #brandstory #localbrandindo",
+    caption:`Kenapa namanya Unculture?
+
+Bukan anti-kultur — kita cuma nggak mau dikotakin sama satu cara berpakaian. Swipe untuk tau lebih.
+
+.
+.
+#unculture #brandstory #localbrandindo #slowfashion #whoweare`
+  },
+  {
+    day:"Sel", num:"9 Jun", badge:"reel", bl:"Reels", title:"'Oversized bukan sekadar trend'",
+    product:"core", pl:"Core Series", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Oversized bukan karena hype. Ini tentang cara lo bergerak.",
+    copy:"Reels edukasi ringan. Positioning bukan promosi — kenapa oversized adalah statement, bukan trend. Subtle product placement Core.",
+    format:"Reels B-roll + text overlay 20 detik",
+    cta:"Setuju? Save & share.",
+    hashtag:"#oversizedtee #fashiontalk #unculture #stylestatement",
+    caption:`Oversized bukan karena hype.
+
+It's about how you move — not how you look standing still.
+
+Three reasons oversized is a statement, not a trend. 🎬 watch till the end.
+
+.
+.
+#oversizedtee #unculture #fashiontalk #stylestatement #localbrand`
+  },
+  {
+    day:"Rab", num:"10 Jun", badge:"feed", bl:"Feed", title:"2 minggu — statement visual",
+    product:"brand", pl:"Brand", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Nggak ada aturan cara berpakaian. Yang ada cuma pilihan.",
+    copy:"Closing visual 2 minggu pertama. Semua produk atau single look kuat. Copy minimal, bold. Setup momentum sebelum push besar Week 3.",
+    format:"Single editorial photo — full lineup atau single look",
+    cta:"Follow — masih banyak yang coming.",
+    hashtag:"#unculture #localbrand #jakartafashion #oversized",
+    caption:`Nggak ada aturan cara berpakaian.
+Yang ada cuma pilihan.
+
+Two weeks in — ini baru permulaan.
+
+Follow untuk lanjutannya. 🖤
+.
+.
+#unculture #localbrand #jakartafashion #oversized #streetwear`
+  }
+];
+
+const w3 = [
+  {
+    day:"Kam", num:"11 Jun", badge:"reel", bl:"Reels", title:"Core Series — hero push",
+    product:"core", pl:"Core Series (all)", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Ini yang gue bikin. Ini yang gue tunggu.",
+    copy:"Hero content Core Series. Reels opening strong — show semua tiga varian Core: Basic Logo Creme, Basic Logo Black, Black on Black. Energi baru, confident.",
+    format:"Reels first wear / fit check 20–30 detik",
+    cta:"Core Series — now available. Link bio.",
+    hashtag:"#unculture #coreseries #oversizedtee #localbrand #newdrop",
+    caption:`Core Basic Logo Creme. Core Basic Logo Black. Core Black on Black.
+
+Tiga karakter. Satu series. Pilih yang paling lo.
+
+Available now — 🔗 link bio
+.
+.
+#unculture #coreseries #oversized #localbrand #jakartafashion`
+  },
+  {
+    day:"Jum", num:"12 Jun", badge:"feed", bl:"Feed", title:"Core Series — detail & texture",
+    product:"core", pl:"Core Series", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Bahan yang nggak nanya lo mau ngapain hari ini.",
+    copy:"Close-up semua varian Core — texture bahan, jahitan, placement logo. Tunjukin detail yang nggak keliatan dari foto biasa.",
+    format:"Single photo close-up + flatlay varian",
+    cta:"Pilih warna lo — 🔗 link bio",
+    hashtag:"#coreseries #unculture #oversizedheavyweight #productdetail",
+    caption:`Detail yang nggak semua orang notice — tapi yang ngerti pasti notice.
+
+Core Series. Bahan yang nggak nanya lo mau ngapain hari ini.
+
+🔗 link bio
+.
+.
+#unculture #coreseries #productdetail #oversized #localbrandindo`
+  },
+  {
+    day:"Sab", num:"13 Jun", badge:"ugc", bl:"UGC", title:"Creator drop #1 — amplify",
+    product:"core", pl:"Core / Cap", special:null, payday:false, done:false, adsBoost:true,
+    hook:"Ini bukan foto kami. Tapi ini Unculture.",
+    copy:"Repost konten creator pertama. Story + Feed. Boost konten ini — organic UGC paling credible untuk dijalankan ads.",
+    format:"Repost story + feed dari creator",
+    cta:"Tag @unculture untuk difeature",
+    hashtag:"#uncultureworn #wornbyreal #coreseries",
+    caption:`Ini bukan foto kami.
+Tapi ini Unculture.
+
+Real people. Real wear. No brief, no direction — just people who get it.
+
+📸 @[tag creator]
+
+Tag @unculture buat masuk ke feed kami 🤝
+.
+.
+#uncultureworn #wornbyreal #coreseries #localbrand`
+  },
+  {
+    day:"Min", num:"14 Jun", badge:"off", bl:"Off", title:"Rest / Buffer",
+    product:"none", pl:"—", special:null, payday:false, done:false, adsBoost:false,
+    hook:"—",
+    copy:"Buffer. Cek performa ads, follow up creator yang belum post, reply semua comment Core Series launch.",
+    format:"No post — engagement & ops",
+    cta:"—",
+    hashtag:"—",
+    caption:"—"
+  },
+  {
+    day:"Sen", num:"15 Jun", badge:"carousel", bl:"Carousel", title:"3 cara style Core — mood breakdown",
+    product:"core", pl:"Core Series", special:null, payday:false, done:false, adsBoost:true,
+    hook:"Satu kaos. Lo yang tentuin vibenya.",
+    copy:"Carousel styling Core Series — 3 mood: minimal monochrome, street layering, casual hangout. Per slide styling beda. Save rate tinggi = bagus di-boost.",
+    format:"Carousel 4–5 slides",
+    cta:"Save dulu, styling nanti 🔖",
+    hashtag:"#stylingtips #oversizedfit #ootdindo #unculture",
+    caption:`Satu kaos. Lo yang tentuin vibenya.
+
+Swipe untuk tiga cara style Core Series — minimal, street, casual. Nggak ada yang salah, semua works.
+
+Save dulu 🔖 styling nanti.
+.
+.
+#unculture #coreseries #stylingtips #oversizedfit #ootdindo`
+  },
+  {
+    day:"Sel", num:"16 Jun", badge:"reel", bl:"Reels", title:"Creator compilation — worn by real ones",
+    product:"core", pl:"Core / Cap", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Real people. Real wear. No filter on the fit.",
+    copy:"Compile konten dari 2–3 creator jadi satu Reels. Minta izin creator dulu. Tunjukin Unculture bukan cuma brand tapi worn by real people.",
+    format:"Reels compilation 20–25 detik",
+    cta:"Unculture is being worn — link bio",
+    hashtag:"#unculturecommunity #wornby #creatorfit #coreseries",
+    caption:`Worn by real ones.
+
+No brief, no direction — just people who get it.
+
+ft. @[creator1], @[creator2], @[creator3]
+
+Unculture Core Series. 🔗 link bio
+.
+.
+#uncultureworn #coreseries #realpeople #localbrand`
+  },
+  {
+    day:"Rab", num:"17 Jun", badge:"feed", bl:"Feed", title:"Core Series — all color hero shot",
+    product:"core", pl:"Core Series (all)", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Pilih satu. Atau jangan pilih.",
+    copy:"Hero shot Core Series semua varian dalam satu frame. Bersih, editorial, on-brand. Visual yang bisa jadi anchor profile IG.",
+    format:"Single photo — flatlay atau hanging shot semua warna",
+    cta:"Available now — 🔗 link bio",
+    hashtag:"#coreseries #unculture #localbrand #oversizedtee",
+    caption:`Basic Logo Creme.
+Basic Logo Black.
+Black on Black.
+
+Pilih satu — atau jangan pilih.
+
+Core Series, all available now. 🔗 link bio
+.
+.
+#unculture #coreseries #oversized #localbrand #jakartafashion`
+  }
+];
+
+const w4 = [
+  {
+    day:"Kam", num:"18 Jun", badge:"reel", bl:"Reels", title:"Unculture Select — spotlight",
+    product:"select", pl:"Unculture Select", special:null, payday:false, done:false, adsBoost:true,
+    hook:"Satu level di atas. Bukan sombong — emang begitu.",
+    copy:"Select spotlight. Tunjukin perbedaan Select vs Core — bahan lebih premium, polo zip, potongan lebih intentional. Boost ads karena ini produk harga tertinggi.",
+    format:"Reels product reveal 20 detik",
+    cta:"Unculture Select — 🔗 link bio",
+    hashtag:"#uncultureselect #premiumlocal #poloshirt #localbrand",
+    caption:`Unculture Select.
+
+Polo zip. Bahan premium. Potongan yang nggak compromise.
+
+Satu level di atas — bukan sombong, emang begitu.
+
+🔗 link bio
+.
+.
+#uncultureselect #premiumlocal #poloshirt #localbrand #oversized`
+  },
+  {
+    day:"Jum", num:"19 Jun", badge:"feed", bl:"Feed", title:"Core Black on Black + Cap — full look",
+    product:"core", pl:"Core Black on Black + Cap", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Dua produk. Satu look. Zero effort.",
+    copy:"Styling Core Black on Black dipadukan Corduroy Cap. Tunjukin product compatibility — dorong average order value naik.",
+    format:"Single photo — full body OOTD",
+    cta:"Both available — 🔗 link bio",
+    hashtag:"#unculturelook #ootdindo #corduroycap #coreblackonblack",
+    caption:`Dua produk. Satu look. Zero effort.
+
+Core Black on Black + Corduroy Cap — the easiest outfit decision you'll make today.
+
+Both available. 🔗 link bio
+.
+.
+#unculture #ootdindo #corduroycap #blackonblack #localbrand`
+  },
+  {
+    day:"Sab", num:"20 Jun", badge:"ugc", bl:"UGC", title:"Creator drop #2 — weekend reach",
+    product:"core", pl:"Core / All", special:null, payday:false, done:false, adsBoost:true,
+    hook:"Unculture di tempat lo nggak expect.",
+    copy:"Repost creator content ke-2. Weekend = reach tertinggi. Boost yang engagement rate-nya paling bagus dari minggu ini.",
+    format:"Repost feed + story mention creator",
+    cta:"Tag @unculture buat masuk ke feed kami",
+    hashtag:"#uncultureworn #realpeople #coreseries",
+    caption:`Unculture di tempat lo nggak expect.
+
+📸 @[tag creator]
+
+Worn. Not styled. There's a difference.
+
+Tag @unculture buat difeature 🤝
+.
+.
+#uncultureworn #realpeople #coreseries #localbrand`
+  },
+  {
+    day:"Min", num:"21 Jun", badge:"off", bl:"Off", title:"Rest / Buffer",
+    product:"none", pl:"—", special:null, payday:false, done:false, adsBoost:false,
+    hook:"—",
+    copy:"Buffer. Review performa semua konten dan ads. Rekap data: sales, follower, CTR. Prep payday week.",
+    format:"No post — data review + prep",
+    cta:"—",
+    hashtag:"—",
+    caption:"—"
+  },
+  {
+    day:"Sen", num:"22 Jun", badge:"carousel", bl:"Carousel", title:"'Kenapa orang beli Unculture?' — social proof",
+    product:"brand", pl:"Brand / All", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Bukan kita yang bilang. Mereka yang buktiin.",
+    copy:"Carousel testimoni / feedback customer — 4–5 slide. Screenshot DM, review, atau quote genuine. Social proof = konversi.",
+    format:"Carousel testimony — clean design",
+    cta:"Coba sendiri — 🔗 link bio",
+    hashtag:"#unculture #customerreview #socialproof #localbrandindo",
+    caption:`Bukan kita yang bilang.
+Mereka yang buktiin.
+
+Swipe untuk lihat kenapa orang balik lagi ke Unculture.
+
+🔗 link bio
+.
+.
+#unculture #socialproof #customerreview #localbrandindo`
+  },
+  {
+    day:"Sel", num:"23 Jun", badge:"reel", bl:"Reels", title:"Core Basic Logo Creme — styling",
+    product:"core", pl:"Core Basic Logo Creme", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Warna yang works di semua kondisi — literally.",
+    copy:"Styling Core Basic Logo Creme — netral, versatile, mudah dipadukan. Tunjukin dengan berbagai bottom: cargo, wide pants, shorts.",
+    format:"Reels OOTD transisi 20 detik",
+    cta:"Core Basic Logo Creme — 🔗 link bio",
+    hashtag:"#corebasiclogo #unculture #neutralfit #ootdindo",
+    caption:`Netral tapi nggak boring.
+
+Core Basic Logo Creme — warna yang works di semua kondisi, literally. Dipaduin apa aja jadi.
+
+🔗 link bio
+.
+.
+#unculture #corebasiclogo #neutralfit #ootdindo #localbrand`
+  },
+  {
+    day:"Rab", num:"24 Jun", badge:"feed", bl:"Feed", title:"Pre-payday teaser",
+    product:"core", pl:"Core / Select", special:null, payday:true, done:false, adsBoost:false,
+    hook:"Besok gajian. Kami cuma ngingetin.",
+    copy:"Pre-payday teaser minimal. Visual kuat, copy singkat. Bikin anticipation sebelum payday push akhir bulan.",
+    format:"Single photo — moody editorial + copy teaser",
+    cta:"Tandai kalender lo.",
+    hashtag:"#unculture #payday #oversized #localbrand",
+    caption:`Besok gajian.
+
+Kami cuma ngingetin. 🖤
+
+🔗 link bio
+.
+.
+#unculture #payday #localbrand #oversized`
+  }
+];
+
+const w5 = [
+  {
+    day:"Kam", num:"25 Jun", badge:"reel", bl:"Reels", title:"PAYDAY DROP — Core Series push",
+    product:"core", pl:"Core Series (all)", special:null, payday:true, done:false, adsBoost:true,
+    hook:"Gajian. Ini saatnya.",
+    copy:"Main payday push. Reels styling Core Series terkuat bulan ini. Hard sell tetap on-brand. Ads budget terbesar hari ini.",
+    format:"Reels OOTD kuat 20–25 detik",
+    cta:"Order sekarang — 🔗 link bio",
+    hashtag:"#paydaytreat #coreseries #unculture #gajian #oversizedtee",
+    caption:`Gajian. Ini saatnya.
+
+Core Basic Logo Creme. Core Basic Logo Black. Core Black on Black.
+
+Pilih sekarang sebelum stok habis.
+
+Order — 🔗 link bio
+.
+.
+#unculture #paydaydrop #coreseries #gajian #localbrand`
+  },
+  {
+    day:"Jum", num:"26 Jun", badge:"feed", bl:"Feed", title:"PAYDAY — Select last call",
+    product:"select", pl:"Unculture Select", special:null, payday:true, done:false, adsBoost:true,
+    hook:"Select tinggal beberapa pcs. Setelah ini, gone.",
+    copy:"Last call Select. Hard scarcity — sebut stok aktual. Payday = hari terbaik untuk push produk premium.",
+    format:"Single photo — editorial kuat + stok note",
+    cta:"Sisa [X] pcs — 🔗 link bio",
+    hashtag:"#lastcall #uncultureselect #paydaydrop #limitedstock",
+    caption:`Unculture Select.
+
+Tinggal [X] pcs. Setelah ini — gone.
+
+Nggak ada restock dalam waktu dekat. Kalau lo mau, sekarang.
+
+🔗 link bio
+.
+.
+#uncultureselect #lastcall #paydaydrop #limitedstock #premiumlocal`
+  },
+  {
+    day:"Sab", num:"27 Jun", badge:"carousel", bl:"Carousel", title:"Juni wrap — highlight bulan ini",
+    product:"core", pl:"All Products", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Juni hampir habis. Ini yang paling banyak dipilih.",
+    copy:"Recap bulan Juni — best content, produk terpopuler, highlight dari creator. Bikin audience ngerasa bagian dari sesuatu yang tumbuh.",
+    format:"Carousel recap — product + community highlight",
+    cta:"Juli ada yang baru — stay tuned.",
+    hashtag:"#unculturejuni #monthlyrecap #localbrand #whatsnext",
+    caption:`Juni hampir habis.
+
+Ini yang paling banyak dipilih — dan yang hampir kehabisan. Swipe untuk lihat highlight bulan ini.
+
+Juli ada yang baru. Stay tuned. 👀
+.
+.
+#unculture #junirecap #localbrand #whatsnext #coreseries`
+  },
+  {
+    day:"Min", num:"28 Jun", badge:"off", bl:"Off", title:"Rest / Buffer",
+    product:"none", pl:"—", special:null, payday:false, done:false, adsBoost:false,
+    hook:"—",
+    copy:"Buffer terakhir Juni. Rekap semua OKR: sales total, follower growth, ads CTR, creator results. Siap untuk review partner.",
+    format:"No post — rekap OKR data",
+    cta:"—",
+    hashtag:"—",
+    caption:"—"
+  },
+  {
+    day:"Sen", num:"29 Jun", badge:"reel", bl:"Reels", title:"Behind Unculture — satu bulan",
+    product:"brand", pl:"Brand", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Satu bulan. Ini yang kami pelajari.",
+    copy:"Closing Reels Juni. BTS brand building — raw, authentic, relatable. Bukan recap produk tapi journey.",
+    format:"Reels BTS brand — montage atau talking head",
+    cta:"Juli kita lanjut — follow untuk update.",
+    hashtag:"#behindunculture #brandbuilding #localbrand #buildinpublic",
+    caption:`Satu bulan.
+
+Ini yang kami pelajari — membangun brand bukan cuma soal produk, tapi soal konsistensi.
+
+Unculture masih dalam perjalanan. Dan lo bagian dari itu.
+
+Juli kita lanjut. 🖤
+.
+.
+#behindunculture #brandbuilding #localbrand #buildinpublic`
+  },
+  {
+    day:"Sel", num:"30 Jun", badge:"feed", bl:"Feed", title:"Closing Juni — statement visual",
+    product:"brand", pl:"Brand / Core", special:null, payday:false, done:false, adsBoost:false,
+    hook:"Lo bukan untuk semua orang. Dan itu bukan masalah.",
+    copy:"Closing visual Juni. Satu foto editorial kuat. Copy singkat, berbobot. Visual terakhir yang dilihat audience bulan ini.",
+    format:"Single editorial photo — flagship visual",
+    cta:"See you in July. — Unculture",
+    hashtag:"#unculture #closingjuni #oversized #localbrandindo",
+    caption:`Lo bukan untuk semua orang.
+Dan itu bukan masalah.
+
+See you in July.
+— Unculture 🖤
+.
+.
+#unculture #closing #localbrand #oversized #jakartafashion`
+  }
+];
+
+let activeCard = null;
+
+function copyCaption(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy caption'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function render(days, gid, did, wn) {
+  const grid = document.getElementById(gid);
+  const detail = document.getElementById(did);
+  if (!grid || !detail) return;
+
+  days.forEach((d, i) => {
+    const card = document.createElement('div');
+    let cls = 'day-card';
+    if (d.badge === 'off') cls += ' off';
+    if (d.special) cls += ' special';
+    if (d.payday) cls += ' payday';
+    if (d.adsBoost) cls += ' ads-boost';
+    card.className = cls;
+
+    const dotClass = d.product === 'select' ? 'dot-select' :
+                     d.product === 'cap'    ? 'dot-cap' :
+                     d.product === 'brand'  ? 'dot-brand' :
+                     d.product === 'core'   ? 'dot-core' : 'dot-none';
+
+    card.innerHTML = `
+      <div class="day-header">
+        <span class="day-name">${d.day}</span>
+        <span class="day-num">${d.num}</span>
+      </div>
+      ${d.special ? `<span class="tag special-tag">🗓 ${d.special}</span>` : ''}
+      ${d.payday ? `<span class="tag payday-tag">💸 Payday</span>` : ''}
+      ${d.adsBoost ? `<span class="tag ads-tag">⚡ Boost</span>` : ''}
+      <span class="type-badge badge-${d.badge}">${d.bl}</span>
+      <p class="post-title">${d.title}</p>
+      <div class="product-tag">
+        <span class="pdot ${dotClass}"></span>
+        <span>${d.pl}</span>
+      </div>
+    `;
+
+    if (d.badge !== 'off') {
+      card.addEventListener('click', () => {
+        const key = `${wn}-${i}`;
+        if (activeCard === key) {
+          detail.classList.remove('open');
+          card.classList.remove('active');
+          activeCard = null;
+          return;
+        }
+        document.querySelectorAll('.day-card.active').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.detail-panel.open').forEach(p => p.classList.remove('open'));
+        activeCard = key;
+        card.classList.add('active');
+
+        const captionId = `cap-${wn}-${i}`;
+        detail.innerHTML = `
+          <div class="detail-top">
+            <div>
+              <div class="detail-title">${d.title}</div>
+              <div class="detail-date">${d.day} · ${d.num} · ${d.bl}${d.adsBoost ? ' · ⚡ Boost Ads' : ''}</div>
+            </div>
+            <button class="close-btn" onclick="document.getElementById('${did}').classList.remove('open');document.querySelectorAll('.day-card.active').forEach(c=>c.classList.remove('active'));">✕</button>
+          </div>
+          <div class="detail-hook">"${d.hook}"</div>
+          <div class="detail-grid">
+            <div class="db full"><div class="db-label">Copy Direction</div><div class="db-val">${d.copy}</div></div>
+            <div class="db"><div class="db-label">Format</div><div class="db-val">${d.format}</div></div>
+            <div class="db"><div class="db-label">CTA</div><div class="db-val">${d.cta}</div></div>
+            <div class="db full"><div class="db-label">Hashtag</div><div class="db-val">${d.hashtag}</div></div>
+          </div>
+          <div class="caption-box">
+            <div class="caption-label">Caption IG / TikTok</div>
+            <div class="caption-text" id="${captionId}">${d.caption}</div>
+            <button class="copy-btn" onclick="copyCaption(document.getElementById('${captionId}').innerText, this)">Copy caption</button>
+          </div>
+        `;
+        detail.classList.add('open');
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    }
+    grid.appendChild(card);
+  });
+}
+
+render(w1, 'w1', 'd1', 1);
+render(w2, 'w2', 'd2', 2);
+render(w3, 'w3', 'd3', 3);
+render(w4, 'w4', 'd4', 4);
+render(w5, 'w5', 'd5', 5);
+</script>
+</body>
+</html>
