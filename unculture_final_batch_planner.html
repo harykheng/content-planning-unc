@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unculture — Final Batch Planner</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f7f6f3;
+    --bg-tertiary: #f0eeea;
+    --text: #1a1a1a;
+    --text-secondary: #6b6b68;
+    --text-tertiary: #a09e99;
+    --border: rgba(0,0,0,0.12);
+    --border-secondary: rgba(0,0,0,0.22);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1b;
+      --bg-secondary: #252523;
+      --bg-tertiary: #2e2e2c;
+      --text: #e8e6e0;
+      --text-secondary: #9a9891;
+      --text-tertiary: #5e5d59;
+      --border: rgba(255,255,255,0.12);
+      --border-secondary: rgba(255,255,255,0.22);
+    }
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-tertiary);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--bg);
+    border-radius: var(--radius-lg);
+    border: 0.5px solid var(--border);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .header-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text);
+    margin-right: 4px;
+  }
+  .header-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .header-desc strong {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* CHANNEL LEGEND */
+  .legend {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 0.5px solid var(--border);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .badge-gray   { background: #F1EFE8; color: #444441; }
+  .badge-purple { background: #EEEDFE; color: #3C3489; }
+  .badge-teal   { background: #E1F5EE; color: #085041; }
+  .badge-amber  { background: #FAEEDA; color: #633806; }
+  .badge-red    { background: #FCEBEB; color: #791F1F; }
+
+  @media (prefers-color-scheme: dark) {
+    .badge-gray   { background: #2C2C2A; color: #D3D1C7; }
+    .badge-purple { background: #26215C; color: #CECBF6; }
+    .badge-teal   { background: #04342C; color: #9FE1CB; }
+    .badge-amber  { background: #412402; color: #FAC775; }
+    .badge-red    { background: #501313; color: #F7C1C1; }
+  }
+
+  /* PHASE BLOCKS */
+  .phases { display: flex; flex-direction: column; gap: 1rem; }
+
+  .phase-block {
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .phase-header {
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.15s;
+  }
+  .phase-header:hover { opacity: 0.85; }
+
+  .phase-header-prep    { background: #F1EFE8; }
+  .phase-header-launch  { background: #EEEDFE; }
+  .phase-header-sustain { background: #E1F5EE; }
+  .phase-header-lastcall{ background: #FAEEDA; }
+
+  @media (prefers-color-scheme: dark) {
+    .phase-header-prep    { background: #2C2C2A; }
+    .phase-header-launch  { background: #26215C; }
+    .phase-header-sustain { background: #04342C; }
+    .phase-header-lastcall{ background: #412402; }
+  }
+
+  .phase-label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .phase-label-prep    { color: #444441; }
+  .phase-label-launch  { color: #3C3489; }
+  .phase-label-sustain { color: #085041; }
+  .phase-label-lastcall{ color: #633806; }
+
+  @media (prefers-color-scheme: dark) {
+    .phase-label-prep    { color: #D3D1C7; }
+    .phase-label-launch  { color: #CECBF6; }
+    .phase-label-sustain { color: #9FE1CB; }
+    .phase-label-lastcall{ color: #FAC775; }
+  }
+
+  .phase-prog {
+    font-size: 12px;
+    margin-left: auto;
+    font-weight: 500;
+  }
+  .phase-prog-prep    { color: #5F5E5A; }
+  .phase-prog-launch  { color: #534AB7; }
+  .phase-prog-sustain { color: #0F6E56; }
+  .phase-prog-lastcall{ color: #854F0B; }
+
+  .phase-chevron {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    transition: transform 0.2s;
+  }
+  .phase-chevron.open { transform: rotate(180deg); }
+
+  .phase-body {
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: var(--bg);
+  }
+  .phase-body.collapsed { display: none; }
+
+  /* DAY ROWS */
+  .day-row {
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .day-header {
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-secondary);
+    cursor: pointer;
+    user-select: none;
+  }
+  .day-header:hover { background: var(--bg-tertiary); }
+
+  .day-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .day-date {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-left: auto;
+    margin-right: 4px;
+  }
+
+  .day-body {
+    padding: 0.6rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--bg);
+  }
+  .day-body.collapsed { display: none; }
+
+  /* TASKS */
+  .task-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px 0;
+  }
+
+  .task-check {
+    width: 17px;
+    height: 17px;
+    min-width: 17px;
+    border: 1.5px solid var(--border-secondary);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    transition: all 0.15s;
+    background: var(--bg);
+  }
+  .task-check:hover { border-color: #1D9E75; }
+  .task-check.done {
+    background: #1D9E75;
+    border-color: #1D9E75;
+  }
+  .task-check.done::after {
+    content: '✓';
+    font-size: 10px;
+    color: white;
+    line-height: 1;
+  }
+
+  .task-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.55;
+    flex: 1;
+  }
+  .task-text.done {
+    text-decoration: line-through;
+    color: var(--text-tertiary);
+  }
+
+  /* CHANNEL TAGS */
+  .ctag {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-right: 4px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  .ctag-tiktok  { background: #EEEDFE; color: #3C3489; }
+  .ctag-ig      { background: #FAECE7; color: #993C1D; }
+  .ctag-dm      { background: #FAEEDA; color: #633806; }
+  .ctag-shopee  { background: #FCEBEB; color: #791F1F; }
+  .ctag-prep    { background: #F1EFE8; color: #444441; }
+
+  @media (prefers-color-scheme: dark) {
+    .ctag-tiktok  { background: #26215C; color: #CECBF6; }
+    .ctag-ig      { background: #4A1B0C; color: #F0997B; }
+    .ctag-dm      { background: #412402; color: #FAC775; }
+    .ctag-shopee  { background: #501313; color: #F7C1C1; }
+    .ctag-prep    { background: #2C2C2A; color: #D3D1C7; }
+  }
+
+  .goal-note {
+    font-size: 11px;
+    color: var(--text-secondary);
+    border-left: 2px solid var(--border-secondary);
+    padding-left: 8px;
+    margin-top: 4px;
+    font-style: italic;
+    line-height: 1.5;
+    border-radius: 0;
+  }
+
+  /* METRICS */
+  .metrics-card {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-top: 1.25rem;
+  }
+  .metrics-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 480px) {
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .metric-box {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: 0.85rem;
+    text-align: center;
+  }
+  .metric-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  .metric-value {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .metric-input {
+    width: 64px;
+    font-size: 20px;
+    font-weight: 500;
+    border: none;
+    border-bottom: 1.5px solid var(--border-secondary);
+    background: transparent;
+    text-align: center;
+    color: var(--text);
+    outline: none;
+    font-family: inherit;
+  }
+  .metric-input:focus { border-bottom-color: #1D9E75; }
+  .revenue-small { font-size: 15px; }
+
+  .progress-wrap {
+    height: 6px;
+    background: var(--border);
+    border-radius: 99px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 6px;
+    background: #1D9E75;
+    border-radius: 99px;
+    transition: width 0.35s ease;
+  }
+
+  /* GLOBAL PROGRESS */
+  .global-progress {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .gp-label { font-size: 13px; color: var(--text-secondary); }
+  .gp-count { font-size: 14px; font-weight: 500; color: var(--text); }
+  .gp-bar-wrap {
+    flex: 1;
+    min-width: 120px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .gp-bar {
+    height: 6px;
+    background: #534AB7;
+    border-radius: 99px;
+    transition: width 0.35s ease;
+  }
+  .gp-pct { font-size: 12px; color: var(--text-tertiary); min-width: 32px; text-align: right; }
+
+  /* RULES */
+  .rules-card {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-top: 1.25rem;
+  }
+  .rules-header {
+    padding: 0.75rem 1rem;
+    background: #FCEBEB;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    .rules-header { background: #501313; }
+  }
+  .rules-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #791F1F;
+  }
+  @media (prefers-color-scheme: dark) {
+    .rules-title { color: #F7C1C1; }
+  }
+  .rules-body {
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--bg);
+  }
+  .rule-item {
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+  .rule-num {
+    font-weight: 500;
+    color: #A32D2D;
+    min-width: 16px;
+  }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-top">
+      <span class="header-title">Unculture — Final Batch</span>
+      <span class="badge badge-gray"><i class="ti ti-calendar"></i> 25 Jun – 5 Jul</span>
+      <span class="badge badge-teal"><i class="ti ti-tag"></i> 219k flat</span>
+      <span class="badge badge-red"><i class="ti ti-ad-off"></i> Tanpa ads</span>
+    </div>
+    <p class="header-desc">Target: cairkan <strong>60 unit dead stock</strong>. Metrik tunggal yang dihitung: <strong>unit kejual</strong> — bukan engagement, bukan followers.</p>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#534AB7"></div> TikTok organik</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#A32D2D"></div> IG (Story/Feed)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#854F0B"></div> DM warm audience</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#791F1F"></div> Shopee / TTS</div>
+    </div>
+  </div>
+
+  <div class="global-progress">
+    <span class="gp-label">Total task selesai</span>
+    <div class="gp-bar-wrap"><div class="gp-bar" id="gpbar" style="width:0%"></div></div>
+    <span class="gp-count" id="gp-count">0 / 36</span>
+    <span class="gp-pct" id="gp-pct">0%</span>
+  </div>
+
+  <div class="phases">
+
+    <!-- PERSIAPAN -->
+    <div class="phase-block">
+      <div class="phase-header phase-header-prep" onclick="togglePhase(this)">
+        <span class="badge badge-gray"><i class="ti ti-settings"></i> Persiapan</span>
+        <span class="phase-label phase-label-prep">22–24 Juni · sebelum buka</span>
+        <span class="phase-prog phase-prog-prep" id="prog-prep">0 / 7</span>
+        <i class="ti ti-chevron-down phase-chevron"></i>
+      </div>
+      <div class="phase-body" id="body-prep">
+        <div class="day-body" style="padding:0.25rem 0;border:none">
+          <div class="task-item"><div class="task-check" onclick="toggleTask(this,'prep')"></div><span class="task-text"><span class="ctag ctag-shopee">Shopee</span><span class="ctag ctag-tiktok">TTS</span>Set harga 219k + update judul listing jadi "[FINAL BATCH]"</span></div>
+          <div class="task-item"><div class="task-check" onclick="toggleTask(this,'prep')"></div><span class="task-text"><span class="ctag ctag-prep">semua channel</span>Nyalain gratis ongkir di semua channel</span></div>
+          <div class="task-item"><div class="task-check" onclick="toggleTask(this,'prep')"></div><span class="task-text"><span class="ctag ctag-shopee">Shopee</span>Daftarin produk ke semua campaign payday gratis</span></div>
+          <div class="task-item"><div class="task-check" onclick="toggleTask(this,'prep')"></div><span class="task-text"><span class="ctag ctag-tiktok">TikTok</span>Kumpulin semua stok video (barter + CapCut) ke satu folder, urutin dari terbaik</span></div>
+          <div class="task-item"><div class="task-check" onclick="toggleTask(this,'prep')"></div><span class="task-text"><span class="ctag ctag-tiktok">TTS</span>Pastiin beberapa video sudah ada keranjang kuning aktif</span></div>
+          <div class="task-item"><div class="task-check" onclick="toggleTask(this,'prep')"></div><span class="task-text"><span class="ctag ctag-dm">DM</span>Bikin list semua orang yang pernah nanya / naksir tapi mundur karena harga</span></div>
+          <div class="task-item"><div class="task-check" onclick="toggleTask(this,'prep')"></div><span class="task-text"><span class="ctag ctag-ig">IG Story</span>Pasang countdown sticker ke tanggal 25</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 1 LAUNCH -->
+    <div class="phase-block">
+      <div class="phase-header phase-header-launch" onclick="togglePhase(this)">
+        <span class="badge badge-purple"><i class="ti ti-rocket"></i> Fase 1</span>
+        <span class="phase-label phase-label-launch">25–27 Juni · launch</span>
+        <span class="phase-prog phase-prog-launch" id="prog-launch">0 / 9</span>
+        <i class="ti ti-chevron-down phase-chevron"></i>
+      </div>
+      <div class="phase-body" id="body-launch">
+
+        <div class="day-row">
+          <div class="day-header" onclick="toggleDay(this)">
+            <span class="day-label">25 Juni — Buka</span>
+            <span class="day-date">Payday peak</span>
+            <i class="ti ti-chevron-down phase-chevron"></i>
+          </div>
+          <div class="day-body">
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'launch')"></div><span class="task-text"><span class="ctag ctag-tiktok">TikTok</span>Post stok video TERBAIK — caption final batch + keranjang kuning. Jam 12 siang / 7–9 malam</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'launch')"></div><span class="task-text"><span class="ctag ctag-ig">IG Story</span>3 frame: teaser detail → reveal harga 219k → link CTA jelas</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'launch')"></div><span class="task-text"><span class="ctag ctag-ig">IG Feed</span>1 post announcement final batch (foto on-body terbaik)</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'launch')"></div><span class="task-text"><span class="ctag ctag-dm">DM</span>Kirim ke seluruh warm list hari ini — ini sumber penjualan tertinggi hari 1</span></div>
+            <div class="goal-note">Goal: ledakan penjualan hari pertama = sinyal velocity buat algoritma TikTok</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-header" onclick="toggleDay(this)">
+            <span class="day-label">26 Juni — Payday peak</span>
+            <i class="ti ti-chevron-down phase-chevron"></i>
+          </div>
+          <div class="day-body">
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'launch')"></div><span class="task-text"><span class="ctag ctag-tiktok">TikTok</span>Stok video ke-2 — angle beda, fokus detail: zip / magnet / tekstur</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'launch')"></div><span class="task-text"><span class="ctag ctag-ig">IG Story</span>Repost pembeli / komentar kemarin (bukti sosial) + reminder "stok terbatas"</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'launch')"></div><span class="task-text"><span class="ctag ctag-dm">DM</span>Follow up yang kemarin di-read tapi belum jawab — soft, ga maksa</span></div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-header" onclick="toggleDay(this)">
+            <span class="day-label">27 Juni</span>
+            <i class="ti ti-chevron-down phase-chevron"></i>
+          </div>
+          <div class="day-body">
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'launch')"></div><span class="task-text"><span class="ctag ctag-tiktok">TikTok</span>Stok video ke-3</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'launch')"></div><span class="task-text"><span class="ctag ctag-ig">IG Story</span>"Sisa X unit" — angka spesifik = urgensi nyata</span></div>
+            <div class="goal-note">Pantau: video TikTok mana yang views-nya naik jauh di atas rata-rata? Tandain — itu pelajaran buat venture berikutnya.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FASE 2 SUSTAIN -->
+    <div class="phase-block">
+      <div class="phase-header phase-header-sustain" onclick="togglePhase(this)">
+        <span class="badge badge-teal"><i class="ti ti-flame"></i> Fase 2</span>
+        <span class="phase-label phase-label-sustain">28 Jun – 1 Jul · sustain</span>
+        <span class="phase-prog phase-prog-sustain" id="prog-sustain">0 / 10</span>
+        <i class="ti ti-chevron-down phase-chevron"></i>
+      </div>
+      <div class="phase-body" id="body-sustain">
+
+        <div class="day-row">
+          <div class="day-header" onclick="toggleDay(this)">
+            <span class="day-label">28 Juni</span>
+            <i class="ti ti-chevron-down phase-chevron"></i>
+          </div>
+          <div class="day-body">
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'sustain')"></div><span class="task-text"><span class="ctag ctag-tiktok">TikTok</span>Stok video ke-4. Kalau ada video fase 1 yang perform bagus, repost / lanjutin angle-nya</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'sustain')"></div><span class="task-text"><span class="ctag ctag-ig">IG Story</span>Testimoni / foto pembeli kalau sudah ada. Kalau belum: detail produk + "ga ada restock"</span></div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-header" onclick="toggleDay(this)">
+            <span class="day-label">29 Juni</span>
+            <i class="ti ti-chevron-down phase-chevron"></i>
+          </div>
+          <div class="day-body">
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'sustain')"></div><span class="task-text"><span class="ctag ctag-tiktok">TikTok</span>Stok video ke-5</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'sustain')"></div><span class="task-text"><span class="ctag ctag-ig">IG Feed</span>Post ke-2 — "kenapa ini terakhir" (storytelling brand, jujur, ga jualan keras). Warm audience suka closure.</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'sustain')"></div><span class="task-text"><span class="ctag ctag-dm">DM</span>Putaran ke-2 ke yang belum respons — beda nada dari yang pertama</span></div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-header" onclick="toggleDay(this)">
+            <span class="day-label">30 Juni</span>
+            <i class="ti ti-chevron-down phase-chevron"></i>
+          </div>
+          <div class="day-body">
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'sustain')"></div><span class="task-text"><span class="ctag ctag-tiktok">TikTok</span>Stok video ke-6</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'sustain')"></div><span class="task-text"><span class="ctag ctag-ig">IG Story</span>"2 hari lagi harga balik 329k" — urgensi penutupan window</span></div>
+            <div class="goal-note">Cek angka: berapa unit kejual total sampai sini? Sisa berapa?</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-header" onclick="toggleDay(this)">
+            <span class="day-label">1 Juli</span>
+            <i class="ti ti-chevron-down phase-chevron"></i>
+          </div>
+          <div class="day-body">
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'sustain')"></div><span class="task-text"><span class="ctag ctag-tiktok">TikTok</span>Post video / repost yang terbaik sejauh ini</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'sustain')"></div><span class="task-text"><span class="ctag ctag-ig">IG Story</span>"Founding price tinggal beberapa hari" + repost semua bukti sosial yang sudah ngumpul</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FASE 3 LAST CALL -->
+    <div class="phase-block">
+      <div class="phase-header phase-header-lastcall" onclick="togglePhase(this)">
+        <span class="badge badge-amber"><i class="ti ti-alarm"></i> Fase 3</span>
+        <span class="phase-label phase-label-lastcall">2–5 Juli · last call</span>
+        <span class="phase-prog phase-prog-lastcall" id="prog-lastcall">0 / 10</span>
+        <i class="ti ti-chevron-down phase-chevron"></i>
+      </div>
+      <div class="phase-body" id="body-lastcall">
+
+        <div class="day-row">
+          <div class="day-header" onclick="toggleDay(this)">
+            <span class="day-label">2 Juli</span>
+            <i class="ti ti-chevron-down phase-chevron"></i>
+          </div>
+          <div class="day-body">
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'lastcall')"></div><span class="task-text"><span class="ctag ctag-tiktok">TikTok</span>Video angle "last call" — sisa unit terakhir</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'lastcall')"></div><span class="task-text"><span class="ctag ctag-ig">IG Story</span>Countdown "3 hari terakhir"</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'lastcall')"></div><span class="task-text"><span class="ctag ctag-dm">DM</span>Putaran terakhir ke seluruh warm list</span></div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-header" onclick="toggleDay(this)">
+            <span class="day-label">3 Juli</span>
+            <i class="ti ti-chevron-down phase-chevron"></i>
+          </div>
+          <div class="day-body">
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'lastcall')"></div><span class="task-text"><span class="ctag ctag-tiktok">TikTok</span>Post stok video sisa</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'lastcall')"></div><span class="task-text"><span class="ctag ctag-ig">IG Story</span>"Sisa X unit, first come" — angka spesifik = urgensi nyata</span></div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-header" onclick="toggleDay(this)">
+            <span class="day-label">4 Juli</span>
+            <i class="ti ti-chevron-down phase-chevron"></i>
+          </div>
+          <div class="day-body">
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'lastcall')"></div><span class="task-text"><span class="ctag ctag-ig">IG Story</span>"BESOK terakhir." Repost semua pembeli yang ada</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'lastcall')"></div><span class="task-text"><span class="ctag ctag-tiktok">TikTok</span>Reminder video pendek</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'lastcall')"></div><span class="task-text"><span class="ctag ctag-dm">DM</span>Push ke yang masih ragu / nyangkut di keranjang</span></div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-header" onclick="toggleDay(this)">
+            <span class="day-label">5 Juli — Penutup</span>
+            <i class="ti ti-chevron-down phase-chevron"></i>
+          </div>
+          <div class="day-body">
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'lastcall')"></div><span class="task-text"><span class="ctag ctag-ig">IG Story + Feed</span>"Final day. Terima kasih buat yang sudah jadi bagian Unculture." — jujur, hangat, ini closure brand</span></div>
+            <div class="task-item"><div class="task-check" onclick="toggleTask(this,'lastcall')"></div><span class="task-text"><span class="ctag ctag-dm">DM</span>Sapu terakhir ke siapa pun yang nyangkut di keranjang / chat</span></div>
+            <div class="goal-note">Tutup window. Hitung total. Sisa stok → lego pelan tanpa effort, fokus pindah ke beauty business.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TRACKER -->
+  <div class="metrics-card">
+    <div class="metrics-title">
+      <i class="ti ti-chart-bar" style="font-size:16px;color:var(--text-secondary)"></i>
+      Tracker unit — cek tiap 2–3 hari
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-box">
+        <div class="metric-label">Unit kejual</div>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:4px">
+          <input class="metric-input" type="number" id="sold" min="0" max="60" value="0" oninput="updateMetrics()">
+          <span style="font-size:13px;color:var(--text-secondary)">/60</span>
+        </div>
+        <div class="progress-wrap"><div class="progress-bar" id="pbar" style="width:0%"></div></div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-label">Sisa stok</div>
+        <div class="metric-value" id="remaining">60</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-label">Pemasukan (219k/unit)</div>
+        <div class="metric-value revenue-small" id="revenue">Rp 0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RULES -->
+  <div class="rules-card">
+    <div class="rules-header">
+      <i class="ti ti-alert-triangle" style="font-size:15px;color:#A32D2D"></i>
+      <span class="rules-title">Aturan main — jangan dilanggar</span>
+    </div>
+    <div class="rules-body">
+      <div class="rule-item"><span class="rule-num">1</span><span>Tiap konten WAJIB ada CTA ke checkout. Konten "bagus" tanpa arah jualan = nol guna di window ini.</span></div>
+      <div class="rule-item"><span class="rule-num">2</span><span>Repost tiap pembeli / komentar. Bukti sosial sekecil apa pun mendorong yang ragu. Ini gratis dan paling ngefek.</span></div>
+      <div class="rule-item"><span class="rule-num">3</span><span>DM warm audience = prioritas tertinggi. Konversi tertinggi datang dari sini, bukan dari reach baru.</span></div>
+      <div class="rule-item"><span class="rule-num">4</span><span>TANPA ADS. Kalau di 4 Juli masih numpuk &gt;30 unit dan lo pengen tuntas, boleh TikTok Shop ads maks 100–200rb — sadar penuh itu biaya buang, bukan investasi.</span></div>
+      <div class="rule-item"><span class="rule-num">5</span><span>Jangan turun di bawah 199k di channel mana pun. Itu rugi beneran.</span></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Ini operasi penutupan, bukan model jualan permanen.<br>
+    Setelah 5 Juli, Unculture tutup chapter — bawa pelajarannya, pindahin fokus dan modal ke beauty business.
+  </div>
+
+</div>
+
+<script>
+  const counts = { prep: 7, launch: 9, sustain: 10, lastcall: 10 };
+  const done = { prep: 0, launch: 0, sustain: 0, lastcall: 0 };
+  const TOTAL = 36;
+
+  function toggleTask(el, phase) {
+    el.classList.toggle('done');
+    el.nextElementSibling.classList.toggle('done');
+    done[phase] += el.classList.contains('done') ? 1 : -1;
+    updateProg(phase);
+    updateGlobal();
+    saveState();
+  }
+
+  function updateProg(phase) {
+    const el = document.getElementById('prog-' + phase);
+    if (el) el.textContent = done[phase] + ' / ' + counts[phase];
+  }
+
+  function updateGlobal() {
+    const total = Object.values(done).reduce((a, b) => a + b, 0);
+    const pct = Math.round(total / TOTAL * 100);
+    document.getElementById('gpbar').style.width = pct + '%';
+    document.getElementById('gp-count').textContent = total + ' / ' + TOTAL;
+    document.getElementById('gp-pct').textContent = pct + '%';
+  }
+
+  function togglePhase(header) {
+    const body = header.parentElement.querySelector('[id^="body-"]');
+    const ch = header.querySelector('.phase-chevron');
+    body.classList.toggle('collapsed');
+    ch.classList.toggle('open');
+  }
+
+  function toggleDay(header) {
+    const body = header.nextElementSibling;
+    const ch = header.querySelector('.phase-chevron');
+    body.classList.toggle('collapsed');
+    ch.classList.toggle('open');
+  }
+
+  function updateMetrics() {
+    const s = Math.max(0, Math.min(60, parseInt(document.getElementById('sold').value) || 0));
+    document.getElementById('remaining').textContent = 60 - s;
+    document.getElementById('revenue').textContent = 'Rp ' + (s * 219000).toLocaleString('id-ID');
+    document.getElementById('pbar').style.width = Math.round(s / 60 * 100) + '%';
+    saveState();
+  }
+
+  function saveState() {
+    try {
+      const checks = {};
+      document.querySelectorAll('.task-check').forEach((el, i) => { checks[i] = el.classList.contains('done'); });
+      const soldVal = document.getElementById('sold').value;
+      localStorage.setItem('unc_plan_v1', JSON.stringify({ checks, sold: soldVal }));
+    } catch (e) {}
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem('unc_plan_v1');
+      if (!raw) return;
+      const state = JSON.parse(raw);
+      document.querySelectorAll('.task-check').forEach((el, i) => {
+        if (state.checks && state.checks[i]) {
+          el.classList.add('done');
+          el.nextElementSibling.classList.add('done');
+          const match = el.getAttribute('onclick').match(/'(\w+)'\)/);
+          if (match) done[match[1]]++;
+        }
+      });
+      if (state.sold) document.getElementById('sold').value = state.sold;
+      Object.keys(done).forEach(updateProg);
+      updateGlobal();
+      updateMetrics();
+    } catch (e) {}
+  }
+
+  loadState();
+</script>
+</body>
+</html>
